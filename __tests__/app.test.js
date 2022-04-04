@@ -19,24 +19,18 @@ describe('/api/topics', () => {
   });
 });
 
-describe('incorrect routes', () => {
-  test('404: returns "Not found" for an incorrect route', async () => {
-    const { body: { msg } } = await request(app).get('/garbage').expect(404);
-    expect(msg).toEqual('Not found');
-  });
-});
-
 describe('/api/articles/:article_id', () => {
   describe('GET', () => {
-    test('200: returns an article object', async () => {
-      const { body: { article } } = await (await request(app).get('/api/articles/1').expect(200));
+    test('200: returns an article object for article_id 1', async () => {
+      const { body: { article } } = await request(app).get('/api/articles/1').expect(200);
       expect(article).toMatchObject({
-        article_id: expect.any(Number),
-        author: expect.any(String),
-        body: expect.any(String),
-        created_at: expect.any(String),
-        title: expect.any(String),
-        votes: expect.any(Number)
+        article_id: 1,
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: '2020-07-09T20:11:00.000Z',
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        votes: 100
       });
     });
 
@@ -49,5 +43,12 @@ describe('/api/articles/:article_id', () => {
       const { body: { msg } } = await request(app).get('/api/articles/9999').expect(404);
       expect(msg).toEqual('Article not found');
     });
+  });
+});
+
+describe('incorrect routes', () => {
+  test('404: returns "Not found" for an incorrect route', async () => {
+    const { body: { msg } } = await request(app).get('/garbage').expect(404);
+    expect(msg).toEqual('Not found');
   });
 });
