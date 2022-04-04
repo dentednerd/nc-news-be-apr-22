@@ -6,8 +6,7 @@ exports.fetchAllTopics = async () => {
     FROM topics;
   `;
 
-  const { rows } = await db
-    .query(queryStr);
+  const { rows } = await db.query(queryStr);
 
   return rows;
 }
