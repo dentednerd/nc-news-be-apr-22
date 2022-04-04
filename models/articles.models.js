@@ -11,7 +11,7 @@ exports.selectArticleById = async (article_id) => {
 
   const { rows } = await db.query(queryStr, queryValues);
 
-  if (!rows.length) {
+  if (rows.length === 0) { // be explicit about rows.length here; we aren't 100% sure what the object coming back will be
     return Promise.reject({
       status: 404,
       msg: 'Article not found'
