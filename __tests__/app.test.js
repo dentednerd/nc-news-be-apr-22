@@ -36,7 +36,7 @@ describe('/api/articles/:article_id', () => {
 
     test('400: returns "Invalid article ID" for an invalid article_id', async () => {
       const { body: { msg } } = await request(app).get('/api/articles/garbage').expect(400);
-      expect(msg).toEqual('Invalid article ID');
+      expect(msg).toEqual('Bad request');
     });
 
     test('404: returns "Article not found" for a non-existent article_id', async () => {

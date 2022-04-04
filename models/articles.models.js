@@ -1,13 +1,6 @@
 const db = require('../db/connection');
 
 exports.selectArticleById = async (article_id) => {
-  if(!/^[0-9]+$/.test(article_id)) {
-    return Promise.reject({
-      status: 400,
-      msg: 'Invalid article ID'
-    });
-  }
-
   const queryStr = `
     SELECT *
     FROM articles
@@ -16,16 +9,14 @@ exports.selectArticleById = async (article_id) => {
 
   const queryValues = [article_id];
 
-  const article = await db
-    .query(queryStr, queryValues)
-    .then(({ rows }) => rows[0]);
+  const { rows } = await db.query(queryStr, queryValues);
 
-  if (!article) {
+  if (!rows.length) {
     return Promise.reject({
       status: 404,
       msg: 'Article not found'
     });
   }
 
-  return article;
+  return rows[0];
 }
