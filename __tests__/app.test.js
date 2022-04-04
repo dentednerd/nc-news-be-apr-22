@@ -16,10 +16,12 @@ describe('/api/topics', () => {
         expect(topic.description).toEqual(expect.any(String));
       });
     });
+  });
+});
 
-    test('404: returns "Not found" for an incorrect route', async () => {
-      const { body: { msg } } = await request(app).get('/api/garbage').expect(404);
-      expect(msg).toEqual('Not found');
-    });
+describe('incorrect routes', () => {
+  test('404: returns "Not found" for an incorrect route', async () => {
+    const { body: { msg } } = await request(app).get('/garbage').expect(404);
+    expect(msg).toEqual('Not found');
   });
 });

@@ -6,16 +6,8 @@ exports.fetchAllTopics = async () => {
     FROM topics;
   `;
 
-  const topics = await db
-    .query(queryStr)
-    .then(({ rows }) => rows);
+  const { rows } = await db
+    .query(queryStr);
 
-  if (!topics || !topics.length) {
-    return Promise.reject({
-      status: 404,
-      msg: 'Topics not found'
-    });
-  }
-
-  return topics;
+  return rows;
 }
