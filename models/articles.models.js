@@ -33,5 +33,12 @@ exports.updateArticleVotes = async (article_id, inc_votes) => {
 
   const { rows } = await db.query(queryStr, queryValues);
 
+  if (rows.length === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: 'Article not found'
+    });
+  }
+
   return rows[0];
 }

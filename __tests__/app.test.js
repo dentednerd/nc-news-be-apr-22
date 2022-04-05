@@ -73,9 +73,18 @@ describe('/api/articles/:article_id', () => {
         .expect(400);
       expect(msg).toEqual('Bad request');
     });
+
+    test('404: returns "Article not found" for a non-existent article_id', async () => {
+      const { body: { msg } } = await request(app)
+        .patch('/api/articles/9999')
+        .send({
+          inc_votes: 1
+        })
+        .expect(404);
+      expect(msg).toEqual('Article not found');
+    });
   });
 });
-
 
 describe('incorrect routes', () => {
   test('404: returns "Not found" for an incorrect route', async () => {
