@@ -12,6 +12,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handlePSQLErrors = (err, req, res, next) => {
+  // despite not being used, we need the 'next' argument in here, otherwise everything breaks (why tho Paul?)
   switch(err.code) {
     case '22P02':
       res.status(400).send({ msg: 'Bad request' });

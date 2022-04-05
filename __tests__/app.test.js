@@ -34,7 +34,7 @@ describe('/api/articles/:article_id', () => {
       });
     });
 
-    test('400: returns "Invalid article ID" for an invalid article_id', async () => {
+    test('400: returns "Bad request" for an invalid article_id', async () => {
       const { body: { msg } } = await request(app).get('/api/articles/garbage').expect(400);
       expect(msg).toEqual('Bad request');
     });
@@ -62,7 +62,17 @@ describe('/api/articles/:article_id', () => {
         topic: 'mitch',
         votes: 101
       });
-    })
+    });
+
+    test('400: returns "Bad request" for an invalid request body', async () => {
+      const { body: { msg }} = await request(app)
+        .patch('/api/articles/1')
+        .send({
+          inc_votes: 'total garbage'
+        })
+        .expect(400);
+      expect(msg).toEqual('Bad request');
+    });
   });
 });
 
