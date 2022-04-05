@@ -19,6 +19,19 @@ describe('/api/topics', () => {
   });
 });
 
+describe('/api/users', () => {
+  describe('GET', () => {
+    test('200: returns an array of user objects, each containing a username', async() => {
+      const { body: { users } } = await request(app).get('/api/users').expect(200);
+      users.forEach((user) => {
+        expect(user).toMatchObject({
+          username: expect.any(String)
+        });
+      });
+    });
+  });
+});
+
 describe('/api/articles/:article_id', () => {
   describe('GET', () => {
     test('200: returns an article object for article_id 1', async () => {
