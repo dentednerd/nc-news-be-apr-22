@@ -46,3 +46,18 @@ exports.updateArticleVotes = async (article_id, inc_votes) => {
 
   return rows[0];
 }
+
+exports.selectAllArticles = async () => {
+  const queryStr = `
+    SELECT articles.*,
+    COUNT(comments.comment_id) :: INT AS comment_count
+    FROM articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    GROUP BY articles.article_id
+    ORDER BY created_at DESC;
+  `;
+
+  const { rows } = await db.query(queryStr);
+
+  return rows;
+}

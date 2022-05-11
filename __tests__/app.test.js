@@ -32,6 +32,27 @@ describe('/api/users', () => {
   });
 });
 
+describe('/api/articles', () => {
+  describe('GET', () => {
+    test('200: returns an array of article objects', async () => {
+      const { body: { articles } } = await request(app).get('/api/articles').expect(200);
+      articles.forEach((article) => {
+        expect(article.article_id).toEqual(expect.any(Number));
+        expect(article.title).toEqual(expect.any(String));
+        expect(article.body).toEqual(expect.any(String));
+        expect(article.votes).toEqual(expect.any(Number));
+        expect(article.topic).toEqual(expect.any(String));
+        expect(article.author).toEqual(expect.any(String));
+        expect(article.created_at).toEqual(expect.any(String));
+        expect(article.comment_count).toEqual(expect.any(Number));
+      });
+      expect(articles).toBeSortedBy('created_at', {
+        descending: true
+      });
+    });
+  });
+});
+
 describe('/api/articles/:article_id', () => {
   describe('GET', () => {
     test('200: returns an article object for article_id 1', async () => {
