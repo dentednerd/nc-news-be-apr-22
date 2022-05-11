@@ -47,9 +47,9 @@ describe('/api/articles/:article_id', () => {
       });
     });
 
-    test('400: returns "Bad request" for an invalid article_id', async () => {
+    test('400: returns "Invalid params/body in request" for an invalid article_id', async () => {
       const { body: { msg } } = await request(app).get('/api/articles/garbage').expect(400);
-      expect(msg).toEqual('Bad request');
+      expect(msg).toEqual('Invalid params/body in request');
     });
 
     test('404: returns "Article not found" for a non-existent article_id', async () => {
@@ -77,14 +77,14 @@ describe('/api/articles/:article_id', () => {
       });
     });
 
-    test('400: returns "Bad request" for an invalid request body', async () => {
+    test('400: returns "Invalid params/body in request" for an invalid request body', async () => {
       const { body: { msg }} = await request(app)
         .patch('/api/articles/1')
         .send({
           inc_votes: 'total garbage'
         })
         .expect(400);
-      expect(msg).toEqual('Bad request');
+      expect(msg).toEqual('Invalid params/body in request');
     });
 
     test('404: returns "Article not found" for a non-existent article_id', async () => {
