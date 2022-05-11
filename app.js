@@ -1,14 +1,11 @@
 const express = require('express');
-const { getTopics } = require('./controllers/topics.controllers');
-const { getArticleById } = require('./controllers/articles.controllers');
+const apiRouter = require('./routes');
 const { handle404s, handleCustomErrors, handlePSQLErrors } = require('./errorHandling');
 
 const app = express();
 app.use(express.json());
 
-app.get('/api/topics', getTopics);
-app.get('/api/articles/:article_id', getArticleById);
-
+app.use('/api', apiRouter);
 app.all('/*', handle404s);
 app.use(handleCustomErrors);
 app.use(handlePSQLErrors);

@@ -20,3 +20,25 @@ exports.selectArticleById = async (article_id) => {
 
   return rows[0];
 }
+
+exports.updateArticleVotes = async (article_id, inc_votes) => {
+  const queryStr = `
+    UPDATE articles
+    SET votes = votes + $1
+    WHERE article_id = $2
+    RETURNING *;
+  `;
+
+  const queryValues = [inc_votes, article_id];
+
+  const { rows } = await db.query(queryStr, queryValues);
+
+  if (rows.length === 0) {
+    return Promise.reject({
+      status: 404,
+      msg: 'Article not found'
+    });
+  }
+
+  return rows[0];
+}
