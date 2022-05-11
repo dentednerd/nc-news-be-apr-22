@@ -2,9 +2,13 @@ const db = require('../db/connection');
 
 exports.selectArticleById = async (article_id) => {
   const queryStr = `
-    SELECT *
+    SELECT articles.*,
+    COUNT(comments.comment_id) :: INT AS comment_count
     FROM articles
-    WHERE article_id = $1;
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    WHERE articles.article_id = $1
+    GROUP BY articles.article_id
+    LIMIT 1;
   `;
 
   const queryValues = [article_id];

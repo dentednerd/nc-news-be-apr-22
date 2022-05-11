@@ -43,7 +43,8 @@ describe('/api/articles/:article_id', () => {
         created_at: '2020-07-09T20:11:00.000Z',
         title: 'Living in the shadow of a great man',
         topic: 'mitch',
-        votes: 100
+        votes: 100,
+        comment_count: 11
       });
     });
 
