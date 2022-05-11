@@ -11,11 +11,13 @@ exports.handleCustomErrors = (err, req, res, next) => {
   } else next(err);
 };
 
+// eslint-disable-next-line no-unused-vars
 exports.handlePSQLErrors = (err, req, res, next) => {
-  // despite not being used, we need the 'next' argument in here, otherwise everything breaks (why tho Paul?)
+  // despite not being used, we need the 'next' argument in here, otherwise everything breaks
+  // Paul says it's because Express identifies middleware functions as error handling functions by checking whether they have 4 args. That's heccin smart of Express if I may say so.
   switch(err.code) {
     case '22P02':
-      res.status(400).send({ msg: 'Bad request' });
+      res.status(400).send({ msg: 'Invalid params/body in request' });
       break;
     default:
       res.status(500).send({ msg: 'Unhandled server error' });
