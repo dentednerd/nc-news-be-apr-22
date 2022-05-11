@@ -19,6 +19,19 @@ describe('/api/topics', () => {
   });
 });
 
+describe('/api/users', () => {
+  describe('GET', () => {
+    test('200: returns an array of user objects, each containing a username', async() => {
+      const { body: { users } } = await request(app).get('/api/users').expect(200);
+      users.forEach((user) => {
+        expect(user).toMatchObject({
+          username: expect.any(String)
+        });
+      });
+    });
+  });
+});
+
 describe('/api/articles/:article_id', () => {
   describe('GET', () => {
     test('200: returns an article object for article_id 1', async () => {
@@ -34,13 +47,53 @@ describe('/api/articles/:article_id', () => {
       });
     });
 
-    test('400: returns "Invalid article ID" for an invalid article_id', async () => {
+    test('400: returns "Invalid params/body in request" for an invalid article_id', async () => {
       const { body: { msg } } = await request(app).get('/api/articles/garbage').expect(400);
-      expect(msg).toEqual('Bad request');
+      expect(msg).toEqual('Invalid params/body in request');
     });
 
     test('404: returns "Article not found" for a non-existent article_id', async () => {
       const { body: { msg } } = await request(app).get('/api/articles/9999').expect(404);
+      expect(msg).toEqual('Article not found');
+    });
+  });
+
+  describe('PATCH', () => {
+    test('200: returns an article object in which the votes have been updated with the addition of the new vote', async () => {
+      const { body: { article }} = await request(app)
+        .patch('/api/articles/1')
+        .send({
+          inc_votes: 1
+        })
+        .expect(200);
+      expect(article).toMatchObject({
+        article_id: 1,
+        author: 'butter_bridge',
+        body: 'I find this existence challenging',
+        created_at: '2020-07-09T20:11:00.000Z',
+        title: 'Living in the shadow of a great man',
+        topic: 'mitch',
+        votes: 101
+      });
+    });
+
+    test('400: returns "Invalid params/body in request" for an invalid request body', async () => {
+      const { body: { msg }} = await request(app)
+        .patch('/api/articles/1')
+        .send({
+          inc_votes: 'total garbage'
+        })
+        .expect(400);
+      expect(msg).toEqual('Invalid params/body in request');
+    });
+
+    test('404: returns "Article not found" for a non-existent article_id', async () => {
+      const { body: { msg } } = await request(app)
+        .patch('/api/articles/9999')
+        .send({
+          inc_votes: 1
+        })
+        .expect(404);
       expect(msg).toEqual('Article not found');
     });
   });
